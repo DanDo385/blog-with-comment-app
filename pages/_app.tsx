@@ -1,4 +1,5 @@
-import "tailwindcss/tailwind.css";
+import 'tailwindcss/tailwind.css';
+
 
 import type { AppProps } from "next/app";
 import Head from "next/head";
@@ -15,9 +16,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta
           name="description"
-          content="Clone and deploy your own Next.js portfolio in minutes."
+          content="Learn how to become a blockchain developer foused on DeFi and engage in discussions on the future of finance."
         />
-        <title>My awesome blog</title>
+        <title>WallSt2Web3</title>
       </Head>
 
       <Header />

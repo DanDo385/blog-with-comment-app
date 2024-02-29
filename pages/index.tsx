@@ -7,16 +7,14 @@ function HomePage() {
       <Container>
         <div className="space-y-6">
           <h1 className="text-2xl font-bold">
-            Hey, I'm a Senior Software Engineer at Company. I enjoy working with
-            Next.js and crafting beautiful front-end experiences.
+            Welcome to the WallSt2Web3 Blog!
           </h1>
           <p>
-            This portfolio is built with Next.js and a library called next-mdx.
-            It allows you to write Markdown and focus on the content of your
-            portfolio.
+          After thirteen years on Wall Street, where I worked in Institutional Sales, Hedge Funds, and Fixed Income Portfolio Management, I've taken a bold step into the world of Blockchain Development, concentrating on Decentralized Finance or DeFi. This transition has marked a significant shift from traditional finance to the cutting-edge sector where I am now contributing to the development of the future of our financial systems.
+          Through this blog, I aim to leverage my deep-seated knowledge in traditional finance to illuminate the transformative world of DeFi. Expect to find discussions on the parallels between established financial frameworks and decentralized models, explorations of current DeFi topics, a curation of resources that have been pivotal to my learning, and strategic advice to help you avoid the obstacles that could impede your journey.
           </p>
 
-          <p>Deploy your own in a few minutes.</p>
+          <p>If you would like to support this page, please take the time to offer your comments on my posts.</p>
         </div>
       </Container>
 
