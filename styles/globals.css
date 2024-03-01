@@ -3,13 +3,10 @@
 @import 'tailwindcss/utilities';
 
 body {
-    background-image: url('/br.jpeg');
-    background-size: cover; /* Cover the entire page */
+    background-image: url('br.jpeg');
+    background-size: auto; 
     background-position: center; /* Center the background image */
-    background-repeat: none;   /* Repeat the image along the vertical axis */
+    background-repeat: none;
+    font: yellowgreen;   /* Repeat the image along the vertical axis */
 }
 
-font {
-    font-family: 'Roboto', sans-serif;
-    color: skyblue;
-}
