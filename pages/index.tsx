@@ -7,7 +7,7 @@ function HomePage() {
       <Container>
         <div className="space-y-6">
           <h1 className="text-2xl font-bold">
-            Welcome to the WallSt2Web3 Blog!
+            Welcome to the C2DeFi Blog!
           </h1>
           <p>
           After thirteen years on Wall Street, where I worked in Institutional Sales, Hedge Funds, and Fixed Income Portfolio Management, I've taken a bold step into the world of Blockchain Development, concentrating on Decentralized Finance or DeFi. This transition has marked a significant shift from traditional finance to the cutting-edge sector where I am now contributing to the development of the future of our financial systems.

@@ -16,7 +16,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           name="description"
           content="Learn how to become a blockchain developer foused on DeFi and engage in discussions on the future of finance."
         />
-        <title>WallSt2Web3</title>
+        <title>C2DeFi</title>
       </Head>
 
       <Header />

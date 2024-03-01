@@ -20,7 +20,7 @@ export default function PostPage({
   return (
     <Container>
       <Head>
-        <title>{post.title} | WallSt2Web3 </title>
+        <title>{post.title} | C2DeFi </title>
       </Head>
 
       {router.isFallback ? (
