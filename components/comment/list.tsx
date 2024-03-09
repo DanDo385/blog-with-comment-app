@@ -33,12 +33,12 @@ export default function CommentList({ comments, onDelete }: CommentListProps) {
               <div className="flex-grow">
                 <div className="flex space-x-2">
                   <b>{comment.user.name}</b>
-                  <time className="text-gray-400">
+                  <time className="text-green-300">
                     {distanceToNow(comment.created_at)}
                   </time>
                   {(isAdmin || isAuthor) && (
                     <button
-                      className="text-gray-400 hover:text-red-500"
+                      className="text-green-300 hover:text-red-500"
                       onClick={() => onDelete(comment)}
                       aria-label="Close"
                     >

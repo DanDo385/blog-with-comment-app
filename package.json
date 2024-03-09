@@ -1,5 +1,5 @@
 {
-  "private": true,
+  "private": false,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,6 +11,7 @@
     "date-fns": "^2.29.3",
     "gray-matter": "4.0.3",
     "ioredis": "^5.2.4",
+    "mkdirp": "^3.0.1",
     "nanoid": "^4.0.0",
     "next": "latest",
     "react": "^18.2.0",

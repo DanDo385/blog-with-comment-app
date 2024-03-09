@@ -20,20 +20,20 @@ export default function PostPage({
   return (
     <Container>
       <Head>
-        <title>{post.title} | C2DeFi </title>
+        <title>{post.title}</title>
       </Head>
 
       {router.isFallback ? (
         <div>Loading…</div>
       ) : (
         <div>
-          <article>
+          <article className = 'text-green-300'>
             <header>
               <h1 className="text-4xl font-bold">{post.title}</h1>
               {post.excerpt ? (
-                <p className="mt-2 text-xl">{post.excerpt}</p>
+                <p className="mt-2 text-xl text-green-300">{post.excerpt}</p>
               ) : null}
-              <time className="flex mt-2 text-gray-400">
+              <time className="flex mt-2 text-green-300">
                 {distanceToNow(new Date(post.date))}
               </time>
             </header>

@@ -20,7 +20,7 @@ export default function NotePage({
               {post.title}
             </Link>
             <p>{post.excerpt}</p>
-            <div className="text-gray-400">
+            <div className="text-green-300">
               <time>{distanceToNow(new Date(post.date))}</time>
             </div>
           </article>
