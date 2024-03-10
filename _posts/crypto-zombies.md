@@ -1,6 +1,6 @@
 ---
 title: "My Portfolio Website"
-excerpt: "An excellent way to begin your journey learning Solidity..."
+excerpt: "A well-crafted portfolio website can truly differentiate you in a job market saturated with traditional resumes."
 date: "2024-03-05"
 ---
 

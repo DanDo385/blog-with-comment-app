@@ -39,7 +39,7 @@ export default function PostPage({
             </header>
 
             <div
-              className="prose mt-10"
+              className="prose mt-10 text-green-300"
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
           </article>

@@ -1,3 +1,4 @@
+// pages/api/comment.ts
 import type { NextApiRequest, NextApiResponse } from "next";
 import fetchComment from "../../lib/fetchComment";
 import createComments from "../../lib/createComment";

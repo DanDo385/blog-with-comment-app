@@ -3,7 +3,7 @@
 @import 'tailwindcss/utilities';
 
 body {
-    background-image: url('/br.jpeg');
+    background-image: url('/blockchaindots.jpeg');
     background-size: auto; 
     background-position: center; /* Center the background image */
     background-repeat: none;

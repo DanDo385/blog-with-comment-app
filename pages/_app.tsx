@@ -14,7 +14,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta
           name="description"
-          content="Learn how to become a blockchain developer foused on DeFi and engage in discussions on the future of finance."
+          content="Learn how to become a blockchain developer and engage in discussions on the future of finance."
         />
         <title>C2DeFi</title>
       </Head>
