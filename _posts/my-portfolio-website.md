@@ -1,7 +1,7 @@
 ---
 title: "My Portfolio Website"
 excerpt: "A well-crafted portfolio website can truly differentiate you in a job market saturated with traditional resumes."
-date: "2024-02-28"
+date: "2024-03-03"
 ---
 
 Lately, I've noticed a bit of a slowdown in my blog posts, and I want to share why. I embarked on an intense journey to set up my portfolio website, diving deep into the world of web development. This adventure introduced me to the wonders of tailwindcss and next.js, tools that were a bit out of my comfort zone but immensely rewarding to learn. It was a back-and-forth process that took about ten days, filled with moments of both excitement and challenge.
