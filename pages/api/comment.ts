@@ -1,21 +1,22 @@
 // pages/api/comment.ts
 import type { NextApiRequest, NextApiResponse } from "next";
+import createComment from "../../lib/createComment";
 import fetchComment from "../../lib/fetchComment";
-import createComments from "../../lib/createComment";
-import deleteComments from "../../lib/deleteComment";
+import deleteComment from "../../lib/deleteComment";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse
 ) {
   switch (req.method) {
+    case "POST":
+      return createComment(req, res);
     case "GET":
       return fetchComment(req, res);
-    case "POST":
-      return createComments(req, res);
     case "DELETE":
-      return deleteComments(req, res);
+      return deleteComment(req, res);
     default:
-      return res.status(400).json({ message: "Invalid method." });
+      res.setHeader("Allow", ["POST", "GET", "DELETE"]);
+      return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }

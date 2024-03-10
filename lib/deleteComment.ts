@@ -1,43 +1,28 @@
+//lib/deleteComment.ts
 import type { NextApiRequest, NextApiResponse } from "next";
-import type { User, Comment } from "../interfaces";
-import redis from "./redis";
-import getUser from "./getUser";
-import clearUrl from "./clearUrl";
+import Comment from "./models/Comment";
+import connectDB from "./db";
 
-export default async function deleteComments(
+export default async function deleteComment(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse
 ) {
-  const url = clearUrl(req.headers.referer);
-  const { comment }: { url: string; comment: Comment } = req.body;
-  const { authorization } = req.headers;
+  await connectDB();
 
-  if (!comment || !authorization) {
-    return res.status(400).json({ message: "Missing parameter." });
-  }
+  const { commentId } = req.query;
 
-  if (!redis) {
-    return res.status(500).json({ message: "Failed to connect to redis." });
+  if (!commentId) {
+    return res.status(400).json({ message: "Comment ID must be provided" });
   }
 
   try {
-    // verify user token
-    const user: User = await getUser(authorization);
-    if (!user) return res.status(400).json({ message: "Invalid token." });
-    comment.user.email = user.email;
-
-    const isAdmin = process.env.NEXT_PUBLIC_AUTH0_ADMIN_EMAIL === user.email;
-    const isAuthor = user.sub === comment.user.sub;
-
-    if (!isAdmin && !isAuthor) {
-      return res.status(400).json({ message: "Need authorization." });
+    const result = await Comment.deleteOne({ _id: commentId });
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "Comment not found" });
     }
 
-    // delete
-    await redis.lrem(url, 0, JSON.stringify(comment));
-
-    return res.status(200).end();
-  } catch (err) {
-    return res.status(400);
+    return res.status(200).json({ message: "Comment deleted successfully" });
+  } catch (error) {
+    return res.status(500).json({ message: "Could not delete the comment", error });
   }
 }

@@ -1,41 +1,29 @@
+//lib/createComment.ts
 import type { NextApiRequest, NextApiResponse } from "next";
-import CommentModel from "../models/Comment"; // Adjust the path as necessary
-import getUser from "./getUser";
-import clearUrl from "./clearUrl";
-import connectDB from "./db"; // Ensure this is correctly imported
+import Comment from "./models/Comment";
+import connectDB from "./db";
 
-export default async function createComments(
+export default async function createComment(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse
 ) {
-  await connectDB(); // Ensure DB connection
+  await connectDB();
 
-  const url = clearUrl(req.headers.referer);
-  const { text } = req.body;
-  const { authorization } = req.headers;
+  const { text, url, userId } = req.body;
 
-  if (!text || !authorization) {
-    return res.status(400).json({ message: "Missing parameter." });
+  if (!text || !url || !userId) {
+    return res.status(400).json({ message: "Missing comment data" });
   }
 
   try {
-    // Verify user token
-    const user = await getUser(authorization);
-    if (!user) return res.status(400).json({ message: "Need authorization." });
-
-    const { name, picture, sub, email } = user;
-
-    // Create and save the comment
-    const comment = await CommentModel.create({
-      url,
+    const comment = await Comment.create({
       text,
-      user: { name, picture, sub, email },
-      createdAt: new Date(),
+      url,
+      userId
     });
 
-    return res.status(200).json(comment);
+    return res.status(201).json(comment);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Unexpected error occurred." });
+    return res.status(500).json({ message: "Could not create the comment", error });
   }
 }

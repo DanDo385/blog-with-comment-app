@@ -1,31 +1,24 @@
+//lib/fetchComment.ts
 import type { NextApiRequest, NextApiResponse } from "next";
-import type { Comment } from "../interfaces";
-import redis from "./redis";
-import clearUrl from "./clearUrl";
+import Comment from "./models/Comment";
+import connectDB from "./db";
 
 export default async function fetchComment(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse
 ) {
-  const url = clearUrl(req.headers.referer);
+  await connectDB();
 
-  if (!redis) {
-    return res.status(500).json({ message: "Failed to connect to redis." });
+  const { url } = req.query;
+
+  if (!url) {
+    return res.status(400).json({ message: "URL must be provided" });
   }
 
   try {
-    // get data
-    const rawComments = await redis.lrange(url, 0, -1);
-
-    // string data to object
-    const comments = rawComments.map((c) => {
-      const comment: Comment = JSON.parse(c);
-      delete comment.user.email;
-      return comment;
-    });
-
+    const comments = await Comment.find({ url }).sort({ createdAt: -1 });
     return res.status(200).json(comments);
-  } catch (_) {
-    return res.status(400).json({ message: "Unexpected error occurred." });
+  } catch (error) {
+    return res.status(500).json({ message: "Could not fetch comments", error });
   }
 }

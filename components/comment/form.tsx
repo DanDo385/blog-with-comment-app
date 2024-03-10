@@ -1,3 +1,4 @@
+// components/comment.form.tsx
 import { useAuth0 } from "@auth0/auth0-react";
 
 type CommentFormProps = {
@@ -5,6 +6,8 @@ type CommentFormProps = {
   setText: Function;
   onSubmit: (e: React.FormEvent) => Promise<void>;
 };
+
+import { JSX } from "react";
 
 export default function CommentForm({
   text,
@@ -14,6 +17,7 @@ export default function CommentForm({
   const { isAuthenticated, logout, loginWithPopup } = useAuth0();
 
   return (
+    <>
     <form onSubmit={onSubmit}>
       <textarea
         className="flex w-full max-h-40 p-3 rounded resize-y bg-slate-900 text-green-300 placeholder-slate-700"
@@ -52,5 +56,6 @@ export default function CommentForm({
         )}
       </div>
     </form>
+    </>
   );
-}
+};
