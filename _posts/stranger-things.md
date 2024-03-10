@@ -1,7 +1,7 @@
 ---
 title: "Stranger Things"
 excerpt: "I love this VS Code theme."
-date: "2024-02-27"
+date: "2024-02-26"
 ---
 
 If you are as persnickety as I am when it comes to your coding setup, I would recommend the Stranger Things theme. You can find this as a VSCode extension. The show is alright, but I love the way the code looks and I tried probably too many themes before I found something I like.

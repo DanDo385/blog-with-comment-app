@@ -1,12 +1,13 @@
+// pages/posts/[slug].tsx
 import type { InferGetStaticPropsType } from "next";
 import { useRouter } from "next/router";
 import ErrorPage from "next/error";
 import Comment from "../../components/comment";
 import Container from "../../components/container";
-import distanceToNow from "../../lib/dateRelative";
 import { getAllPosts, getPostBySlug } from "../../lib/getPost";
 import markdownToHtml from "../../lib/markdownToHtml";
 import Head from "next/head";
+import formatFullDate from "lib/dateRelative";
 
 export default function PostPage({
   post,
@@ -33,9 +34,11 @@ export default function PostPage({
               {post.excerpt ? (
                 <p className="mt-2 text-xl text-green-300">{post.excerpt}</p>
               ) : null}
-              <time className="flex mt-2 text-green-300">
-                {distanceToNow(new Date(post.date))}
-              </time>
+              {post.date && (
+                <time className="flex mt-2 text-green-300">
+                  {formatFullDate(post.date)}
+                </time>
+              )}
             </header>
 
             <div

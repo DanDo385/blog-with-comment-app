@@ -1,3 +1,4 @@
+// pages/posts/index.tsx
 import type { InferGetStaticPropsType } from "next";
 import Link from "next/link";
 import Container from "../../components/container";
@@ -21,7 +22,7 @@ export default function NotePage({
             </Link>
             <p>{post.excerpt}</p>
             <div className="text-green-300">
-              <time>{distanceToNow(new Date(post.date))}</time>
+              <time>{distanceToNow(post.date ? new Date(post.date) : new Date())}</time>
             </div>
           </article>
         ))
