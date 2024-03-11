@@ -1,4 +1,4 @@
-//lib/getPost.ts 
+// lib/getPost.ts
 import type { Post } from "../interfaces";
 import fs from "fs";
 import { join } from "path";
@@ -10,13 +10,15 @@ export function getPostSlugs() {
   return fs.readdirSync(postsDirectory);
 }
 
-export function getPostBySlug(slug: string, fields: string[] = []) {
+// lib/getPost.ts
+
+export function getPostBySlug(slug: string, fields: string[] = []): Post {
   const realSlug = slug.replace(/\.md$/, "");
   const fullPath = join(postsDirectory, `${realSlug}.md`);
   const fileContents = fs.readFileSync(fullPath, "utf8");
   const { data, content } = matter(fileContents);
 
-  const items: Partial<Post> = {};
+  const items: Post = {};
 
   // Ensure only the minimal needed data is exposed
   fields.forEach((field) => {
@@ -32,21 +34,17 @@ export function getPostBySlug(slug: string, fields: string[] = []) {
     }
   });
 
-  return items as Post;
+  return items;
 }
 
-export function getAllPosts(fields: string[] = []) {
+
+export function getAllPosts(fields: string[] = []): Post[] {
   const slugs = getPostSlugs();
   const posts = slugs
     .map((slug) => getPostBySlug(slug, fields))
-    // Filter posts without a valid date
-    .filter((post) => post.date !== undefined) // Check if date is not undefined
-    // sort posts by date in descending order
-    .sort((post1, post2) => {
-      // Assuming date is always in string format 'YYYY-MM-DD'
-      const date1 = post1.date ? new Date(post1.date) : new Date();
-      const date2 = post2.date ? new Date(post2.date) : new Date();
-      return date2.getTime() - date1.getTime();
-    });
+    .filter((post) => post.date) // Filter posts that have a date
+    // Sort posts by date in descending order
+    .sort((post1, post2) => (post1.date && post2.date) ? new Date(post2.date).getTime() - new Date(post1.date).getTime() : 0);
+
   return posts;
 }

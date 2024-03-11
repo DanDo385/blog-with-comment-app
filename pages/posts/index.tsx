@@ -2,7 +2,7 @@
 import type { InferGetStaticPropsType } from "next";
 import Link from "next/link";
 import Container from "../../components/container";
-import distanceToNow from "../../lib/dateRelative";
+import formatFullDate from "../../lib/dateRelative";
 import { getAllPosts } from "../../lib/getPost";
 
 export default function NotePage({
@@ -10,20 +10,18 @@ export default function NotePage({
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <Container>
-      {allPosts.length ? (
+      {allPosts.length > 0 ? (
         allPosts.map((post) => (
           <article key={post.slug} className="mb-10">
-            <Link
-              as={`/posts/${post.slug}`}
-              href="/posts/[slug]"
-              className="text-lg leading-6 font-bold"
-            >
-              {post.title}
+            <Link href={`/posts/${post.slug}`}>
+              <a className="text-lg leading-6 font-bold">{post.title}</a>
             </Link>
             <p>{post.excerpt}</p>
-            <div className="text-green-300">
-              <time>{distanceToNow(post.date ? new Date(post.date) : new Date())}</time>
-            </div>
+            {post.date && (
+              <div className="text-green-300">
+                <time>{formatFullDate(new Date(post.date))}</time>
+              </div>
+            )}
           </article>
         ))
       ) : (

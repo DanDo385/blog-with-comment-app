@@ -1,3 +1,4 @@
+// components/comment/form.tsx
 import CommentForm from "./form";
 import CommentList from "./list";
 import useComments from "../../hooks/useComment";

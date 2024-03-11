@@ -5,9 +5,9 @@ import ErrorPage from "next/error";
 import Comment from "../../components/comment";
 import Container from "../../components/container";
 import { getAllPosts, getPostBySlug } from "../../lib/getPost";
-import markdownToHtml from "../../lib/markdownToHtml";
+import { markdownToHtml } from "../../lib/markdownToHtml";
 import Head from "next/head";
-import formatFullDate from "lib/dateRelative";
+import formatFullDate from "../../lib/dateRelative";
 
 export default function PostPage({
   post,
@@ -24,51 +24,21 @@ export default function PostPage({
         <title>{post.title}</title>
       </Head>
 
-      {router.isFallback ? (
-        <div>Loading…</div>
-      ) : (
-        <div>
-          <article className = 'text-green-300'>
-            <header>
-              <h1 className="text-4xl font-bold">{post.title}</h1>
-              {post.excerpt ? (
-                <p className="mt-2 text-xl text-green-300">{post.excerpt}</p>
-              ) : null}
-              {post.date && (
-                <time className="flex mt-2 text-green-300">
-                  {formatFullDate(post.date)}
-                </time>
-              )}
-            </header>
+      <Comment postSlug={post.slug} />
+              </Container>
+            );
+          }
 
-            <div
-              className="prose mt-10 text-green-300"
-              dangerouslySetInnerHTML={{ __html: post.content }}
-            />
-          </article>
-
-          <Comment />
-        </div>
-      )}
-    </Container>
-  );
-}
-
-type Params = {
-  params: {
-    slug: string;
-  };
-};
-
-export async function getStaticProps({ params }: Params) {
+          export async function getStaticProps({ params }: { params: { slug: string } }) {
   const post = getPostBySlug(params.slug, [
-    "slug",
-    "title",
-    "excerpt",
-    "date",
-    "content",
+    'title',
+    'date',
+    'slug',
+    'author',
+    'content',
+    'excerpt',
   ]);
-  const content = await markdownToHtml(post.content || "");
+  const content = await markdownToHtml({ markdown: post.content || '' });
 
   return {
     props: {
@@ -81,16 +51,12 @@ export async function getStaticProps({ params }: Params) {
 }
 
 export async function getStaticPaths() {
-  const posts = getAllPosts(["slug"]);
+  const posts = getAllPosts(['slug']);
 
   return {
-    paths: posts.map(({ slug }) => {
-      return {
-        params: {
-          slug,
-        },
-      };
-    }),
+    paths: posts.map((post) => ({
+      params: { slug: post.slug },
+    })),
     fallback: false,
   };
 }

@@ -1,24 +1,15 @@
 // lib/models/Comment.ts
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose from 'mongoose';
 
-interface IBlogPost extends Document {
-  title: string;
-  content: string;
-  authorId: mongoose.Schema.Types.ObjectId; // Assuming you have an User model
-  comments: mongoose.Schema.Types.ObjectId[]; // Array of comment references
-  createdAt: Date;
-  updatedAt: Date;
-}
+const CommentSchema = new mongoose.Schema({
+  text: { type: String, required: true },
+  user: {
+    _id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    name: String,
+    email: String,
+  },
+  postSlug: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
+});
 
-const BlogPostSchema: Schema = new Schema({
-  title: { type: String, required: true },
-  content: { type: String, required: true },
-  authorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
-}, { timestamps: true });
-
-const BlogPost = mongoose.model<IBlogPost>('BlogPost', BlogPostSchema);
-
-export default BlogPost;
-
-
+export default mongoose.models.Comment || mongoose.model('Comment', CommentSchema);

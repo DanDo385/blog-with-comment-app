@@ -1,3 +1,4 @@
+//pages/index.tsx
 import Container from "../components/container";
 import Image from "next/image";
 

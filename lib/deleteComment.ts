@@ -26,3 +26,13 @@ export default async function deleteComment(
     return res.status(500).json({ message: "Could not delete the comment", error });
   }
 }
+export const deleteCommentHandler = async (
+  req: NextApiRequest,
+  res: NextApiResponse
+) => {
+  try {
+    await deleteComment(req, res);
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};

@@ -1,9 +1,10 @@
+//hooks/useComments.ts
 import type { Comment } from "../interfaces";
 import React, { useState } from "react";
 import useSWR from "swr";
 import { useAuth0 } from "@auth0/auth0-react";
 
-const fetcher = (url) =>
+const fetcher = (url: string) =>
   fetch(url).then((res) => {
     if (res.ok) {
       return res.json();

@@ -1,3 +1,4 @@
+// components/comment/list.tsx 
 import type { Comment } from "../../interfaces";
 import distanceToNow from "../../lib/dateRelative";
 import { useAuth0 } from "@auth0/auth0-react";

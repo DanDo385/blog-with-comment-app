@@ -1,3 +1,4 @@
+//interfaces/index.ts
 export type User = {
   name: string;
   picture: string;
@@ -15,10 +16,11 @@ export type Comment = {
 
 export type Post = {
   slug?: string;
-  title?: string;
+  title?: string; // Include title
   author?: string;
-  date?: Date;
+  date?: Date; // Include date
   content?: string;
-  excerpt?: string;
+  excerpt?: string; // Include excerpt
   [key: string]: any;
 };
+
