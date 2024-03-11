@@ -1,21 +1,15 @@
 // pages/posts/[slug].tsx
-import type { InferGetStaticPropsType } from "next";
-import { useRouter } from "next/router";
-import ErrorPage from "next/error";
-import Comment from "../../components/comment";
-import Container from "../../components/container";
-import { getAllPosts, getPostBySlug } from "../../lib/getPost";
-import { markdownToHtml } from "../../lib/markdownToHtml";
-import Head from "next/head";
-import formatFullDate from "../../lib/dateRelative";
+import { InferGetStaticPropsType } from 'next';
+import Head from 'next/head';
+import Container from '../../components/container';
+import { getPostBySlug, getAllPosts } from '../../lib/getPost';
+import CommentSection from '../../components/comment';
+import formatFullDate from '../../lib/dateRelative';
+import { markdownToHtml } from 'lib/markdownToHtml';
 
-export default function PostPage({
-  post,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
-  const router = useRouter();
-
-  if (!router.isFallback && !post?.slug) {
-    return <ErrorPage statusCode={404} />;
+export default function PostPage({ post }: InferGetStaticPropsType<typeof getStaticProps>) {
+  if (!post) {
+    return <div>Post not found!</div>;
   }
 
   return (
@@ -23,21 +17,18 @@ export default function PostPage({
       <Head>
         <title>{post.title}</title>
       </Head>
+      <article>
+        <h1>{post.title}</h1>
+        <p>{post.excerpt}</p>
+        <div dangerouslySetInnerHTML={{ __html: post.content }} />
+        <CommentSection postSlug={post.slug ?? ''} />
+      </article>
+    </Container>
+  );
+}
 
-      <Comment postSlug={post.slug} />
-              </Container>
-            );
-          }
-
-          export async function getStaticProps({ params }: { params: { slug: string } }) {
-  const post = getPostBySlug(params.slug, [
-    'title',
-    'date',
-    'slug',
-    'author',
-    'content',
-    'excerpt',
-  ]);
+export async function getStaticProps({ params }: { params: any }) {
+  const post = getPostBySlug(params.slug, ['slug', 'title', 'excerpt', 'content']);
   const content = await markdownToHtml({ markdown: post.content || '' });
 
   return {
