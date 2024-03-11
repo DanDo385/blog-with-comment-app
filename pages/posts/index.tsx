@@ -14,7 +14,7 @@ export default function NotePage({
         allPosts.map((post) => (
           <article key={post.slug} className="mb-10">
             <Link href={`/posts/${post.slug}`}>
-              <a className="text-lg leading-6 font-bold">{post.title}</a>
+              <span className="text-lg leading-6 font-bold">{post.title}</span>
             </Link>
             <p>{post.excerpt}</p>
             {post.date && (
