@@ -1,45 +1,41 @@
-// components/comment/index.tsx
-import React, { useState, useEffect, useCallback } from 'react';
+// components/comment/index.ts
+import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import CommentForm from './form'; // Ensure this is correctly imported
-import CommentList from './list'; // Ensure this is correctly imported
-import type { Comment } from '../../interfaces'; // Ensure this type is correctly defined
+import CommentForm from './form'; // Make sure this component exists and is correctly implemented
+import CommentList from './list'; // Make sure this component exists and is correctly implemented
+import type { Comment } from '../../interfaces';
 
-type Props = {
+type CommentSectionProps = {
   postSlug: string;
 };
 
-const CommentSection: React.FC<Props> = ({ postSlug }) => {
-  const {
-    isAuthenticated,
-    loginWithRedirect,
-    getAccessTokenSilently,
-    isLoading,
-    error,
-  } = useAuth0();
+const CommentSection: React.FC<CommentSectionProps> = ({ postSlug }) => {
+  const { isAuthenticated, loginWithRedirect, getAccessTokenSilently } = useAuth0();
   const [text, setText] = useState('');
   const [comments, setComments] = useState<Comment[]>([]);
 
-  const fetchComments = useCallback(async () => {
-    const response = await fetch(`/api/comments?postSlug=${postSlug}`);
-    const data = await response.json();
-    setComments(data);
-  }, [postSlug]);
-
   useEffect(() => {
+    // Fetch comments for the current post
+    const fetchComments = async () => {
+      try {
+        const res = await fetch(`/api/comments?postSlug=${postSlug}`);
+        const data = await res.json();
+        setComments(data);
+      } catch (error) {
+        console.error('Error fetching comments:', error);
+      }
+    };
+
     fetchComments();
-  }, [fetchComments]);
+  }, [postSlug]);
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!isAuthenticated) {
-      // Trigger login if not authenticated
       loginWithRedirect();
       return;
     }
-
-    if (!text.trim()) return;
-
+    
     try {
       const token = await getAccessTokenSilently();
       const response = await fetch('/api/comments', {
@@ -51,40 +47,30 @@ const CommentSection: React.FC<Props> = ({ postSlug }) => {
         body: JSON.stringify({ text, postSlug }),
       });
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
+      if (response.ok) {
+        const newComment = await response.json();
+        setComments([...comments, newComment]);
+        setText('');
+      } else {
+        console.error('Failed to post comment');
       }
-
-      setText('');
-      const newComment: Comment = await response.json();
-      setComments((prevComments) => [...prevComments, newComment]);
     } catch (error) {
       console.error('Error posting comment:', error);
     }
   };
 
-  // Adjust this to handle actual deletion logic
-  const onDelete = async (commentId: string) => {
-    // Placeholder for deletion logic
-  };
-
-  // Handle Auth0 loading state and errors
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>{error.message}</div>;
-  }
-
   return (
     <div>
       {isAuthenticated ? (
-        <CommentForm text={text} setText={setText} onSubmit={onSubmit} />
+        <>
+          <CommentForm text={text} setText={setText} onSubmit={onSubmit} />
+          <CommentList comments={comments} />
+        </>
       ) : (
-        <button onClick={() => loginWithRedirect()}>Log In to Comment</button>
+        <button onClick={() => loginWithRedirect({ redirectUri: window.location.origin + window.location.pathname })}>
+          Log In to Comment
+        </button>
       )}
-      <CommentList comments={comments} onDelete={onDelete} />
     </div>
   );
 };
