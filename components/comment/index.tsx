@@ -1,32 +1,31 @@
-// components/comment/index.tsx
 import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import CommentForm from './form'; // Assuming this exists and is correctly implemented
-import CommentList from './list'; // Assuming this exists and is setup for displaying comments
-import { Comment } from 'interfaces';
+import CommentForm from './form'; // Ensure this is correctly imported
+import CommentList from './list'; // Ensure this is correctly imported
+import type { Comment } from '../../interfaces';
 
-const CommentSection = ({ postSlug }: { postSlug: string }) => {
+const CommentSection: React.FC<{ postSlug: string }> = ({ postSlug }) => {
+  // Now useAuth0 and useState are correctly called inside the component
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
   const [text, setText] = useState('');
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState<Comment[]>([]);
 
   useEffect(() => {
-    // Fetch comments for the current post
     const fetchComments = async () => {
-      const res = await fetch(`/api/comments?postSlug=${postSlug}`);
-      const data = await res.json();
+      const response = await fetch(`/api/comments?postSlug=${postSlug}`);
+      const data = await response.json();
       setComments(data);
     };
 
     fetchComments();
   }, [postSlug]);
 
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
     if (!text.trim()) return;
-
+    
     const token = await getAccessTokenSilently();
-    await fetch('/api/comment', {
+    const response = await fetch('/api/comments', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -35,19 +34,26 @@ const CommentSection = ({ postSlug }: { postSlug: string }) => {
       body: JSON.stringify({ text, postSlug }),
     });
 
-    setText('');
-    // Refresh comments
-    await setComments([]);
+    if (response.ok) {
+      setText('');
+      const newComment: Comment = await response.json();
+      setComments(prevComments => [...prevComments, newComment]);
+    }
+  };
+
+  // Implement actual deletion logic here if needed
+  const onDelete = async (commentId: string) => {
+    // Placeholder for deletion logic
   };
 
   return (
     <div>
-      {isAuthenticated && (
+      {isAuthenticated ? (
         <CommentForm text={text} setText={setText} onSubmit={onSubmit} />
+      ) : (
+        <button onClick={() => getAccessTokenSilently()}>Log In to Comment</button>
       )}
-      <CommentList comments={comments} onDelete={function (comment: Comment): Promise<void> {
-        throw new Error('Function not implemented.');
-      } } />
+      <CommentList comments={comments} onDelete={onDelete} />
     </div>
   );
 };
