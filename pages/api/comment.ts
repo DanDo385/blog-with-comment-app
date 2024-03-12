@@ -1,48 +1,38 @@
-// pages/api/comments.ts
+// pages/api/comment.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
-import connectDB from '../../lib/db';
-import Comment from '../../lib/models/Comment';
+import connectDB from '../../../lib/db';
+import { verifyToken } from '../../../lib/auth'; // Implement or use Auth0's JWT verification
+import Comment from '../../../lib/models/Comment';
 
-
-
-async function getComments(_req: NextApiRequest, res: NextApiResponse, postSlug: string) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await connectDB();
-  const comments = await Comment.find({ postSlug }).sort({ createdAt: -1 });
-  res.status(200).json(comments);
-}
 
-interface CustomNextApiRequest extends NextApiRequest {
-  user: string; // Replace 'string' with the correct type for the 'user' property
-}
+  if (req.method === 'POST') {
+    const { authorization } = req.headers;
+    if (!authorization) {
+      return res.status(401).json({ message: 'Not authorized' });
+    }
 
-async function postComment(req: CustomNextApiRequest, res: NextApiResponse) {
-  await connectDB();
-  const { text, postSlug } = req.body;
-  const comment = await Comment.create({ text, postSlug, user: req.user }); // Ensure req.user is set correctly from Auth0
-  res.status(201).json(comment);
-}
+    const token = authorization.split(' ')[1];
+    const decoded = verifyToken(token); // Verify the token
+    if (!decoded) {
+      return res.status(403).json({ message: 'Token is invalid' });
+    }
 
-async function deleteComment(req: NextApiRequest, res: NextApiResponse) {
-  await connectDB();
-  const { commentId } = req.query;
-  const result = await Comment.deleteOne({ _id: commentId });
-  if (result.deletedCount === 0) {
-    return res.status(404).json({ message: 'Comment not found' });
-  }
-  res.status(200).json({ message: 'Comment deleted successfully' });
-}
+    // Extract comment data from request body
+    const { text, postSlug } = req.body;
+    if (!text || !postSlug) {
+      return res.status(400).json({ message: 'Missing data' });
+    }
 
-export default async function commentsHandler(req: NextApiRequest, res: NextApiResponse) {
-  switch (req.method) {
-    case 'GET':
-      const { postSlug } = req.query;
-      return getComments(req, res, postSlug as string);
-    case 'POST':
-      return postComment(req as CustomNextApiRequest, res); // Cast req as CustomNextApiRequest
-    case 'DELETE':
-      return deleteComment(req, res);
-    default:
-      res.setHeader('Allow', ['GET', 'POST', 'DELETE']);
-      return res.status(405).end(`Method ${req.method} Not Allowed`);
-  }
-}
+    // Create and save the comment
+    const comment = new Comment({ text, postSlug, user: decoded.sub }); // Adjust according to your user model
+    await comment.save();
+
+    return res.status(201).json(comment);
+  } else if (req.method === 'GET') {
+    const { postSlug } = req.query;
+    const comments = await Comment.find({ postSlug }).sort({ createdAt: -1 });
+    res.status(200).json(comments);
+  } else {
+    res.setHeader('Allow', ['GET
