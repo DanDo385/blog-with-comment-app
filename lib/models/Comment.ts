@@ -1,3 +1,4 @@
+// lib/models/Comment.ts
 declare namespace NodeJS {
   interface Global {
     mongoose: {

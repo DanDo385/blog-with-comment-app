@@ -2,10 +2,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import connectDB from '../../lib/db';
 import Comment from '../../lib/models/Comment';
-import { NextApiRequest } from 'next';
 
 
-async function getComments(req: NextApiRequest, res: NextApiResponse, postSlug: string) {
+
+async function getComments(_req: NextApiRequest, res: NextApiResponse, postSlug: string) {
   await connectDB();
   const comments = await Comment.find({ postSlug }).sort({ createdAt: -1 });
   res.status(200).json(comments);
@@ -38,7 +38,7 @@ export default async function commentsHandler(req: NextApiRequest, res: NextApiR
       const { postSlug } = req.query;
       return getComments(req, res, postSlug as string);
     case 'POST':
-      return postComment(req, res);
+      return postComment(req as CustomNextApiRequest, res); // Cast req as CustomNextApiRequest
     case 'DELETE':
       return deleteComment(req, res);
     default:
