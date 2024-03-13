@@ -3,7 +3,6 @@ title: "Jamie Dimon Craps on Cryto as JPM prepares for Crypto ETF Launch"
 excerpt: "Unfortunately, this additional income, or carry, will bypass ETF investors, flowing instead directly into the banks' coffers"
 date: "2024-02-27"
 ---
-
 Jamie Dimon, a notable figure in the financial world, has been vocal about his skepticism towards cryptocurrencies, citing concerns over their use in illegal activities such as money laundering, fraud, tax evasion, and funding illicit trades like sex trafficking. Amidst these criticisms, there's an observable rush among Wall Street giants, including JPMorgan, to secure regulatory green lights for launching their own Exchange-Traded Funds (ETFs).
 
 ETFs are investment funds traded on stock exchanges, much like stocks. They hold assets such as stocks, commodities, or bonds and generally operate with an arbitrage mechanism designed to keep the trading close to its net asset value, though deviations can occasionally occur. The financial industry's eagerness to introduce cryptocurrency ETFs seems to be influenced by a strategy to enter the market at lower price points, potentially keeping cryptocurrency values subdued in the interim.

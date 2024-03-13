@@ -4,10 +4,12 @@ import type { Comment } from "../../interfaces";
 import distanceToNow from "../../lib/dateRelative";
 import { useAuth0 } from "@auth0/auth0-react";
 
-type CommentListProps = {
+type NewType = {
   comments: Comment[]; // Assuming comments are always provided
   onDelete: (commentId: string) => Promise<void>;
 };
+
+type CommentListProps = NewType;
 
 const CommentList: React.FC<CommentListProps> = ({ comments, onDelete }) => {
   const { user } = useAuth0();

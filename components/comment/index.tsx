@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import CommentForm from './form';
 import CommentList from './list';
-import useComments from '../../hooks/useComments'; // Assuming this hook is implemented correctly
+import useComments from '../../hooks/useComment'; // Assuming this hook is implemented correctly
 
 const CommentSection = ({ postSlug }: { postSlug: string }) => {
   const { isAuthenticated, loginWithRedirect, getAccessTokenSilently } = useAuth0();
@@ -36,7 +36,7 @@ const CommentSection = ({ postSlug }: { postSlug: string }) => {
       {isAuthenticated ? (
         <>
           <CommentForm text={text} setText={setText} onSubmit={onSubmit} />
-          <CommentList comments={comments} />
+          <CommentList comments={comments} onDelete={() => {}} />
         </>
       ) : (
         <button onClick={() => loginWithRedirect()}>
