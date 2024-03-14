@@ -1,43 +1,52 @@
 // pages/api/comment.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
-import connectDB from '../../../lib/db';
+import connectDB from '../../lib/db'; // Adjust the path as necessary
 import { getSession } from '@auth0/nextjs-auth0';
-import { verifyToken } from '../../../lib/auth'; // Implement or use Auth0's JWT verification
-import Comment from '../../../lib/models/Comment';
+import Comment from '../../lib/models/Comment'; // Adjust the path as necessary
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await connectDB();
 
   if (req.method === 'POST') {
-    const { authorization } = req.headers;
-    if (!authorization) {
-      return res.status(401).json({ message: 'Not authorized' });
+    try {
+      const session = getSession(req, res);
+      if (!session || !session.user) {
+        return res.status(401).json({ message: 'Not authorized' });
+      }
+
+      const { text, postSlug } = req.body;
+      if (!text || !postSlug) {
+        return res.status(400).json({ message: 'Missing text or postSlug' });
+      }
+
+      // Assuming Comment is a Mongoose model
+      const comment = await Comment.create({
+        text,
+        postSlug,
+        user: session.user.sub, // Use user ID from the session
+      });
+
+      return res.status(201).json(comment);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Server error' });
     }
-
-    const token = authorization.split(' ')[1];
-    const decoded = verifyToken(token); // Verify the token
-    if (!decoded) {
-      return res.status(403).json({ message: 'Token is invalid' });
-    }
-
-    // Extract comment data from request body
-    const { text, postSlug } = req.body;
-    if (!text || !postSlug) {
-      return res.status(400).json({ message: 'Missing data' });
-    }
-
-    // Create and save the comment
-    const comment = new Comment({ text, postSlug, user: decoded.sub }); // Adjust according to your user model
-    await comment.save();
-
-    return res.status(201).json(comment);
   } else if (req.method === 'GET') {
-    const { postSlug } = req.query;
-    const comments = await Comment.find({ postSlug }).sort({ createdAt: -1 });
-    res.status(200).json(comments);
+    try {
+      const { postSlug } = req.query;
+      if (typeof postSlug !== 'string') {
+        return res.status(400).json({ message: 'Invalid postSlug' });
+      }
+
+      const comments = await Comment.find({ postSlug }).sort({ createdAt: -1 });
+      return res.status(200).json(comments);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Server error' });
+    }
   } else {
-    res.setHeader('Allow', ['GET']);
-    res.status(405).end('Method Not Allowed');
+    res.setHeader('Allow', ['POST', 'GET']);
+    return res.status(405).end('Method Not Allowed');
   }
 }
 
