@@ -22,7 +22,7 @@ const CommentList = () => {
   return (
     <div>
       <h2>Comment List</h2>
-      {comments.map((comment) => (
+      {comments.map((comment: any) => (
         <div key={comment.id}>
           <p>User: {comment.user}</p>
           <p>Comment: {comment.content}</p>

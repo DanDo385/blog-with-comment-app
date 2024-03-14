@@ -1,12 +1,16 @@
 // pages/api/auth/[...auth0].ts
-import { handleAuth } from '@auth0/nextjs-auth0';
+import { AppRouteHandlerFnContext, CallbackOptions, handleAuth, handleCallback } from '@auth0/nextjs-auth0';
+import { OptionsProvider } from '@auth0/nextjs-auth0/dist/handlers/router-helpers';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest } from 'next/server';
 
 export default handleAuth({
-  async callback(req, res) {
+  async callback(req: NextApiRequest | NextRequest | CallbackOptions | OptionsProvider<CallbackOptions> | undefined, res: NextApiResponse | AppRouteHandlerFnContext) {
     try {
       await handleCallback(req, res, { redirectTo: '/posts' });
     } catch (error) {
-      res.status(error.status || 500).end(error.message);
+      const e = error as Error & { status?: number };
+      (res as NextApiResponse).status(e.status || 500).end(e.message);
     }
-  },
+  }
 });

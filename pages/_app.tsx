@@ -11,14 +11,13 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();
 
   const onRedirectCallback = (appState: any) => {
-    // Use the router to push to the target route after Auth0 redirect
     router.push(appState?.returnTo || window.location.pathname);
   };
 
   return (
     <Auth0Provider
-      domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN}
-      clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID}
+      domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN ?? ''}
+      clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID ?? ''}
       redirectUri={typeof window !== 'undefined' ? `${window.location.origin}/api/auth/callback` : undefined}
       onRedirectCallback={onRedirectCallback}
     >
