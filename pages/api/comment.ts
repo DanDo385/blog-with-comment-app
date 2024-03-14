@@ -1,6 +1,7 @@
 // pages/api/comment.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
 import connectDB from '../../../lib/db';
+import { getSession } from '@auth0/nextjs-auth0';
 import { verifyToken } from '../../../lib/auth'; // Implement or use Auth0's JWT verification
 import Comment from '../../../lib/models/Comment';
 
@@ -35,4 +36,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const comments = await Comment.find({ postSlug }).sort({ createdAt: -1 });
     res.status(200).json(comments);
   } else {
-    res.setHeader('Allow', ['GET
+    res.setHeader('Allow', ['GET']);
+    res.status(405).end('Method Not Allowed');
+  }
+}
+
+

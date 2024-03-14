@@ -1,3 +1,4 @@
+// lib.db.ts
 import mongoose from 'mongoose';
 
 // Ensure the MongoDB URI is defined
@@ -6,12 +7,6 @@ if (!MONGODB_URI) {
   throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
 }
 
-/**
- * Global is used here to maintain a cached connection across hot reloads
- * in development. This prevents connections growing exponentially
- * during API Route usage.
- */
-// Extend the NodeJS global type with our custom mongoose cache
 declare global {
   var mongoose: {
     conn: mongoose.Connection | null;
