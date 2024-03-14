@@ -1,4 +1,6 @@
 // lib/dateRelative.ts
-export default function formatFullDate(dateTime: number | Date) {
-    return new Date(dateTime).toLocaleDateString();
-  }
+import { formatDistanceToNow } from 'date-fns';
+
+export default function distanceToNow(date: number | Date) {
+  return formatDistanceToNow(new Date(date), { addSuffix: true });
+}

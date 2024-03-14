@@ -1,7 +1,7 @@
 // pages/posts/index.tsx
 import type { InferGetStaticPropsType } from "next";
 import Link from "next/link";
-import Container from "../../components/container";
+import Container from "../../components/Container";
 import formatFullDate from "../../lib/dateRelative";
 import { getAllPosts } from "../../lib/getPost";
 

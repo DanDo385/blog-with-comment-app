@@ -4,10 +4,24 @@ import Head from 'next/head';
 import Container from '../../components/container';
 import { getPostBySlug, getAllPosts } from '../../lib/getPost';
 import CommentSection from '../../components/comment';
-import formatFullDate from '../../lib/dateRelative';
-import { markdownToHtml } from 'lib/markdownToHtml';
+import { markdownToHtml } from '../../lib/markdownToHtml';
+import { useAuth0 } from '@auth0/auth0-react';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 
 export default function PostPage({ post }: InferGetStaticPropsType<typeof getStaticProps>) {
+  const { user, isAuthenticated } = useAuth0();
+  const [showLoginSuccess, setShowLoginSuccess] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isAuthenticated && router.query.loginSuccess) {
+      setShowLoginSuccess(true);
+      // Optionally, remove the loginSuccess query parameter from the URL
+      router.replace(router.pathname, undefined, { shallow: true });
+    }
+  }, [isAuthenticated, router]);
+
   if (!post) {
     return <div>Post not found!</div>;
   }
@@ -21,6 +35,7 @@ export default function PostPage({ post }: InferGetStaticPropsType<typeof getSta
         <h1>{post.title}</h1>
         <p>{post.excerpt}</p>
         <div dangerouslySetInnerHTML={{ __html: post.content }} />
+        {showLoginSuccess && <div>Welcome back, {user?.name}!</div>}
         <CommentSection postSlug={post.slug ?? ''} />
       </article>
     </Container>
