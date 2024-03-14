@@ -20,6 +20,8 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID ?? ''}
       redirectUri={typeof window !== 'undefined' ? `${window.location.origin}/api/auth/callback` : undefined}
       onRedirectCallback={onRedirectCallback}
+      // Add the baseURL parameter here
+      baseURL={typeof window !== 'undefined' ? window.location.origin : ''}
     >
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
